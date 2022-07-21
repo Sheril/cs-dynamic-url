@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { TextInput } from '@contentstack/venus-components'
 import ContentstackAppSdk from '@contentstack/app-sdk'
 
+import '@contentstack/venus-components/build/main.css'
+
+const ERROR_MESSAGE = 'This extension can only be used inside Contentstack'
 const PRODUCT = 'product'
 const FIELDS = Object.freeze({
   title: 'title',
@@ -41,9 +44,8 @@ function App() {
 
   useEffect(() => {
     // eslint-disable-next-line no-restricted-globals
-    if (self === top) {
-      const errorMessage = 'This extension can only be used in Contentstack'
-      setError(errorMessage)
+    if (typeof window !== 'undefined' && self === top) {
+      setError(ERROR_MESSAGE)
     } else {
       ContentstackAppSdk.init().then((appSdk) => {
         setApp(appSdk)
